@@ -175,11 +175,11 @@
         console.log(username);
 
         if (username == nameField.val()){
-            const messageElement = $("<li><p class='sender_name.me'>"+username+"</p><p class='right_balloon'>"+message+"</p><p class='clear_balloon'></p></li>");
+            const messageElement = $("<li><p class='sender_name.me'>"+username+"</p><p class='right_ballon'>"+message+"</p><p class='clear_ballon'></p></li>");
             console.log(messageElement);
             messageList.append(messageElement);
         }else{
-            const messageElement = $("<li><p class='sender_name'>"+username+"</p><p class='left_ballon'>"+message+"</p><p class='clear_balloon'></p></li>");
+            const messageElement = $("<li><p class='sender_name'>"+username+"</p><p class='left_ballon'>"+message+"</p><p class='clear_ballon'></p></li>");
             console.log(messageElement);
             messageList.append(messageElement);
         }
