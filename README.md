@@ -1,4 +1,5 @@
 ①課題内容（課題名・どんな作品か）
+講義番号０５のAPIです。
 APIはGoogle Translate APIを使用しました。
 Firebaseを使ったChat機能と組み合わせて、テキストを翻訳してそのままChatで送れるという立て付けにしました。
 Firebaseのプロジェクト名は、TranslateChat。
