@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/translate@1/translate.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>TraslateChat</title>
+    
+</head>
+<body>
+
+<div id="wrapper">
+
+    <!-- 翻訳 -->
+    <div id="translate">
+
+    <div class="panel-default">
+
+    <div class='panel-heading'>
+        <p>Translate</p>
+    </div>
+
+    <!-- インプット -->
+    <div class="form-groups panel-footer">
+        <input id='input_text' type="text" class="form-control" placeholder="Translate Before">
+    </div>
+
+    <!-- 言語選択 -->
+    <div class="las_select_set">
+    <div class="form-group">
+    <select name="lan_select" id="lan_select" class="form-control">
+        <option value="">Select</option>
+        <option value="en">英語</option>
+        <option value="fr">フランス語</option>
+        <option value="zh">中国語</option>
+        <option value="ar">アラビア語</option>
+        <option value="ja">日本語</option>
+    </select>
+    </div>
+    <button id='btn' class="btn-primary">Translate</button>
+    </div> 
+    
+    <!-- アウトプット -->
+    <div class="form-group panel-footer">
+        <input id='output_text' type="text"class="form-control" placeholder="Translate After"> 
+    </div>
+
+    <!-- 翻訳とChat接続 -->
+    <div class="las_select_set"><button id="btn_connect" class="btn-primary">Transfer</button></div>
+    </div>
+    </div>
+
+
+    <!-- chat -->
+    <div id="chat">
+    <div class="panel-default">
+        <div class='panel-heading'>
+            <p>Chat</p>
+        </div>
+        <div id="scroller" class="panel-body">
+            <ul id="messages">
+            </ul>
+        </div>
+        <div class="panel-footer form-group">
+            <input type="text" class="form-control" id="nameInput" placeholder="Please input your name">
+        </div>
+        <div class="panel-footer form-group">
+            <input type="text" class="form-control" id="messageInput" placeholder="Please input your messages">
+        </div>
+        <div class="las_select_set"><button id="btn_send" class="btn-primary">Send</button></div>
+    </div>
+    </div>
+
+    </div>
+
+    <script>
+
+    //翻訳
+    translate.engine = "google";
+    translate.key = "AIzaSyBjw9MmsmMpQ4lxUNDDvoCCTC0FWnko9V0";
+
+    $('#btn').on('click', async e => {
+        e.preventDefault();
+
+        const obj = document.getElementById('lan_select');
+        const lan = obj.value;
+        console.log(lan);
+
+        const text_string = $('#input_text').val();
+        const translate_string = await translate(text_string,{to:lan});
+        console.log(translate_string);
+        document.getElementById('output_text').value = translate_string;
+    });
+
+
+    //翻訳とChat接続
+    $('#btn_connect').on('click',function(){
+        const str = document.getElementById('output_text').value;
+        document.getElementById('messageInput').value = str;
+        document.getElementById('input_text').value = '';
+        document.getElementById('output_text').value = '';
+    });
+
+
+    //Chat
+    //Firebase
+    const firebaseConfig = {
+    apiKey: "AIzaSyCrJLP_om5oxPnDcSI3hw-YDdJAN-PEqKs",
+    authDomain: "translatechat-56fcf.firebaseapp.com",
+    projectId: "translatechat-56fcf",
+    storageBucket: "translatechat-56fcf.appspot.com",
+    messagingSenderId: "169988496808",
+    databaseURL:"https://translatechat-56fcf-default-rtdb.firebaseio.com/",
+    appId: "1:169988496808:web:bd9e2c0ac4be75a6aa919d"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const messageRef = firebase.database().ref();
+
+    const messageField = $('#messageInput');
+    const nameField = $('#nameInput');
+    const messageList = $('#messages');
+
+    //Same click action
+    messageField.keypress(function(e){
+        if(e.keyCode == 13){
+            const username = nameField.val();
+            const message = messageField.val();
+
+            console.log(username);
+            console.log(message);
+
+            messageRef.push({
+                name:username,
+                text:message
+            });
+
+            messageField.val('');
+
+            $('#scroller').scrollTop($('#messages').height());
+        }
+    });
+
+    //Same click action
+    $('#btn_send').on('click',function(e){
+
+            const username = nameField.val();
+            const message = messageField.val();
+
+            console.log(username);
+            console.log(message);
+
+            messageRef.push({
+                name:username,
+                text:message
+            });
+
+            messageField.val('');
+
+            $('#scroller').scrollTop($('#messages').height());
+     });
+
+
+    messageRef.limitToLast(10).on('child_added',function(snapshot){
+        const data = snapshot.val();
+        const username = data.name;
+        const message = data.text;
+
+        console.log(username);
+
+        if (username == nameField.val()){
+            const messageElement = $("<li><p class='sender_name.me'>"+username+"</p><p class='right_balloon'>"+message+"</p><p class='clear_balloon'></p></li>");
+            console.log(messageElement);
+            messageList.append(messageElement);
+        }else{
+            const messageElement = $("<li><p class='sender_name'>"+username+"</p><p class='left_ballon'>"+message+"</p><p class='clear_balloon'></p></li>");
+            console.log(messageElement);
+            messageList.append(messageElement);
+        }
+
+        messageList[0].scrollTop = messageList[0].scrollHeight;  
+    });
+
+
+
+    </script>
+</body>
+</html>

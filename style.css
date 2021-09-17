@@ -1,0 +1,93 @@
+@media (min-width: 600px){
+    #wrapper{
+        display: flex;
+    }
+    #translate{
+        flex-grow: 1;
+    }
+    #chat{
+        flex-grow: 1;
+    }
+}
+
+.panel-heading{
+    margin-bottom: 15px;
+}
+
+#input_text{
+    width: 80%;
+    margin: 10px auto;
+}
+
+#lan_select{
+    width: 100%;
+}
+
+.las_select_set{
+    display: flex;
+    width: 300px;
+    margin: 15px auto;
+    justify-content: space-evenly;
+
+}
+
+#output_text{
+    width: 80%;
+    margin: 10px auto;
+}
+
+#btn_connect, #btn_send{
+   height: 50px;
+}
+
+ul,li{
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-align: left;
+}
+
+#scroller{
+    height: 500px;
+    overflow: auto;
+}
+
+/* 左からの吹き出し */
+.left_ballon{
+    position: relative;
+    background-color: #f1f0f0;
+    border: 0px solid #777;
+    margin: 5px 10px;
+    border-radius: 15px;
+    width: 100%;
+    clear: both;
+}
+
+/* 右からの吹き出し */
+.right_ballon{
+    color: #fff;
+    position: relative;
+    background-color: #0084ff;
+    border: 0px solid #777;
+    margin: 5px 10px;
+    border-radius: 15px;
+    width: 100%;
+    clear: both;
+    float: right;
+}
+
+/* 割り込みを解除 */
+.clear_ballon{
+    clear: both;
+}
+
+.sender_name{
+    margin-bottom: -5px;
+    padding-left: 20px;
+    color: rgba(0, 0, 0, .40);
+}
+
+.sender_name.me{
+    float: right;
+    padding: 0 20px 0 0;
+}
