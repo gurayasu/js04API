@@ -182,6 +182,7 @@
             const messageElement = $("<li><p class='sender_name'>"+username+"</p><p class='left_ballon'>"+message+"</p><p class='clear_ballon'></p></li>");
             console.log(messageElement);
             messageList.append(messageElement);
+            document.getElementById('input_text').value = message;
         }
 
         messageList[0].scrollTop = messageList[0].scrollHeight;  
